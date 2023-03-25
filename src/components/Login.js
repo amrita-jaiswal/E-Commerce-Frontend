@@ -8,6 +8,7 @@ export default function Login() {
 
   useEffect(() => {
     const auth = localStorage.getItem("user");
+
     if (auth) {
       navigate("/");
     }
@@ -17,13 +18,17 @@ export default function Login() {
       method: "post",
       body: JSON.stringify({ email, password }),
       headers: {
-        "Content-type": "application/json",
+        "Content-Type": "application/json",
       },
     });
     result = await result.json();
-    console.warn(result);
-    localStorage.setItem("user", JSON.stringify(result));
-
+    if (result.auth) {
+      localStorage.setItem("user", JSON.stringify(result.user));
+      localStorage.setItem("token", JSON.stringify(result.auth));
+      navigate("/");
+    } else {
+      alert("enter correct details");
+    }
   };
 
   return (

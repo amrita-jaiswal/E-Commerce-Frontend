@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AddProduct() {
   const [name, setName] = useState("");
@@ -7,6 +8,7 @@ function AddProduct() {
   const [ram, setRam] = useState("");
   const [brand, setBrand] = useState("");
   const [err, setErr] = useState(false);
+  const navigate = useNavigate()
 
   async function addDetails() {
     if (!name || !category || !price || !ram || !brand) {
@@ -19,9 +21,13 @@ function AddProduct() {
       body: JSON.stringify({ name, price, category, ram, brand, userId }),
       headers: {
         "content-type": "application/JSON",
+        authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
       },
     });
     result = await result.json();
+
+    navigate("/")
+
   }
 
   return (
